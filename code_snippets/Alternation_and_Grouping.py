@@ -1,5 +1,8 @@
 ## Alternation
 
+import re
+
+
 pet = re.compile(r'cat|dog')
 
 bool(pet.search('I like cats'))

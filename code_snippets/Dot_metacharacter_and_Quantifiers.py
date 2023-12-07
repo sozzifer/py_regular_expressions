@@ -1,5 +1,8 @@
 ## Dot metacharacter
 
+import re
+
+
 re.sub(r'c.t', 'X', 'tac tin cat abc;tuv acute')
 
 re.sub(r'r..d', 'X', 'breadth markedly reported overrides')

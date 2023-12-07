@@ -1,12 +1,10 @@
-## re.search()
+import re
 
 sentence = 'This is a sample string'
 
 'is' in sentence
 
 'xyz' in sentence
-
-import re
 
 bool(re.search(r'is', sentence))
 

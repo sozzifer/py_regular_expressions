@@ -1,5 +1,8 @@
 ## Backreference
 
+import re
+
+
 re.sub(r'\[(\d+)\]', r'\1', '[52] apples [and] [31] mangoes')
 
 re.sub(r'(_)?_', r'\1', '_apple_ __123__ _banana_')

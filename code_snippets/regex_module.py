@@ -1,4 +1,5 @@
 import regex
+import re
 
 regex.DEFAULT_VERSION = regex.VERSION1
 

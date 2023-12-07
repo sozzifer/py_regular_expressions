@@ -1,5 +1,8 @@
 ## Escaping with backslash
 
+import re
+
+
 bool(re.search(r'b^2', 'a^2 + b^2 - C*3'))
 
 bool(re.search(r'b\^2', 'a^2 + b^2 - C*3'))

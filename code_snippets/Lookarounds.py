@@ -1,5 +1,8 @@
 ## Conditional expressions
 
+import re
+
+
 items = ['1,2,3,4', 'a,b,c,d', '#apple 123']
 
 [s for s in items if '#' in s and re.search(r'\d', s)]

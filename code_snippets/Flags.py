@@ -1,5 +1,8 @@
 ## re.IGNORECASE
 
+import re
+
+
 bool(re.search(r'cat', 'Cat'))
 
 bool(re.search(r'cat', 'Cat', flags=re.IGNORECASE))

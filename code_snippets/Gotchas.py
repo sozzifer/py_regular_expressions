@@ -1,5 +1,8 @@
 ## Escape sequences
 
+import re
+import regex
+
 bool(re.search(r'\t', 'cat\tdog'))
 
 bool(re.search(r'\c', 'cat\tdog'))

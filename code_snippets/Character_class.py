@@ -1,5 +1,8 @@
 ## Custom character sets
 
+import re
+
+
 words = ['cute', 'cat', 'cot', 'coat', 'cost', 'scuttle']
 
 [w for w in words if re.search(r'c[ou]t', w)]

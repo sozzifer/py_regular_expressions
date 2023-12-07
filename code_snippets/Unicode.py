@@ -1,5 +1,8 @@
 ## re.ASCII
 
+import re
+
+
 re.findall(r'\w+', 'fox:αλεπού')
 
 re.findall(r'\w+', 'fox:αλεπού', flags=re.A)

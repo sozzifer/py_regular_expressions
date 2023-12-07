@@ -1,5 +1,8 @@
 ## String anchors
 
+import re
+
+
 bool(re.search(r'\Acat', 'cater'))
 
 bool(re.search(r'\Acat', 'concatenation'))

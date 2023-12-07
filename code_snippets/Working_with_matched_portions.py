@@ -1,5 +1,8 @@
 ## re.Match object
 
+import re
+
+
 re.search(r'so+n', 'too soon a song snatch')
 
 re.fullmatch(r'1(2|3)*4', '1233224')
