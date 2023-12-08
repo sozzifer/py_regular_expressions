@@ -198,3 +198,62 @@ print(re.sub(r"t.*a.*q.*f", "X", sentence))
 # Backtracks to "u"
 print(re.sub(r"t.*a.*u", "X", sentence))
 # Xite a fabricated tale
+
+##############################
+#   Non-greedy quantifiers   #
+##############################
+"""
+Append ? to a greedy quantifier to make it non-greedy
+Also known as lazy or reluctant quantifiers
+Match as minimally as possible
+"""
+
+# Lazily match any character between "f" and "o"
+print(re.sub(r"f.??o", "X", "foot"))
+# Xot
+print(re.sub(r"f.??o", "X", "frost"))
+# Xst
+
+# Greedy, any character, 0 or 1 times
+# Matches empty string, then "123456789"
+print(re.sub(r".?", "X", "123456789"))
+# XXXXXXXXXX
+
+# Non-greedy, any character, 0 or 1 times
+# Matches empty string, character, empty string, character... up to final empty string
+print(re.sub(r".??", "X", "123456789"))
+# XXXXXXXXXXXXXXXXXXX
+
+# No quantifier, any character
+# Matches every character
+print(re.sub(r".", "X", "123456789"))
+# XXXXXXXXX
+
+# Non-greedy, any character, 0 or more times
+# Matches empty string, character, empty string, character... up to final empty string
+print(re.sub(r".*?", "X", "123456789"))
+# XXXXXXXXXXXXXXXXXXX
+
+# Non-greedy, any character between 2 and 5 times
+# Isn't n=5 redundant here?
+print(re.sub(r".{2,5}", "X", "123456789"))
+# XXXX9
+print(re.sub(r".{2,5}?", "X", "123456789", count=1))
+# X3456789
+
+# Greedy, any character, 0 or more times
+print(re.split(r":.*:", "green:3.14:teal::brown:oh!:blue"))
+# ["green", "blue"]
+
+# Non-greedy, any character, 0 or more times
+print(re.split(r":.*?:", "green:3.14:teal::brown:oh!:blue"))
+# ['green', 'teal', 'brown', 'blue']
+
+##############################
+#   Possessive quantifiers   #
+##############################
+"""
+Append + to a greedy quantifier to make it possessive
+Only in Python >=3.11 (use regex module for Python <3.11)
+Possessive quantifiers don't backtrack to find a match
+"""
