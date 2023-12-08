@@ -257,3 +257,128 @@ Append + to a greedy quantifier to make it possessive
 Only in Python >=3.11 (use regex module for Python <3.11)
 Possessive quantifiers don't backtrack to find a match
 """
+ip = "fig:mango:pineapple:guava:apples:orange"
+
+# Possessive
+print(re.sub(r":.*+", "X", ip))
+# figX
+
+# Greedy
+print(re.sub(r":.*", "X", ip))
+# figX
+
+# Non-greedy
+print(re.sub(r":.*?", "X", ip))
+# figXmangoXpineappleXguavaXapplesXorange
+
+# Possessive quantifier won't backtrack so the pattern below will never match
+print(bool(re.search(r":.*+apple", ip)))
+# False
+
+# Find numbers >= 100 where each number has optional leading zeroes (314, 00984)
+numbers = "42 314 001 12 00984"
+
+# Fails because 0* and \d{3,} both match on leading zeroes
+# Greedy quantifiers give up characters to ensure the regex succeeds
+# In this case, "001" backtracks to match \d{3,}
+print(re.findall(r"0*\d{3,}", numbers))
+# ['314', '001', '00984']
+
+# Adding the possessive quantifier ensures no backtracking on "001"
+print(re.findall(r"0*+\d{3,}", numbers))
+# ['314', '00984']
+
+# Only using greedy quantifiers
+print(re.findall(r"0*[1-9]\d{2,}", numbers))
+# ['314', '00984']
+
+#################
+#   Exercises   #
+#################
+
+# Replace 42//5 or 42/5 with 8 for the given input.
+ip = "a+42//5-c pressure*3+42/5-14256"
+print(re.sub(r"(42//5|42/5)", "8", ip))
+print(re.sub(r"42(/+)5", "8", ip))
+# a+8-c pressure*3+8-14256
+# print(re.sub(r"42//?5", "8", ip))
+
+# Filter all elements starting with "hand" and ending immediately with at most one more character or "le".
+items = ["handed", "hand", "handled", "handy", "unhand", "hands", "handle"]
+print([i for i in items if re.search(r"\bhand(.|le)?\b", i)])
+# ['hand', 'handy', 'hands', 'handle']
+# [w for w in items if re.fullmatch(r'hand(.|le)?', w)]
+
+# Use re.split() to get the output as shown for the given input strings.
+eqn1 = "a+42//5-c"
+print(re.split(r"42//5", eqn1))
+# ['a+', '-c']
+eqn2 = "pressure*3+42/5-14256"
+print(re.split(r"42/5", eqn2))
+# ['pressure*3+', '-14256']
+eqn3 = "r*42-5/3+42///5-42/53+a"
+print(re.split(r"42/5", eqn3))
+# ['r*42-5/3+42///5-', '3+a']
+
+# pat = re.compile(r"42//?5")
+# print(pat.split(eqn1))
+# print(pat.split(eqn2))
+# print(pat.split(eqn3))
+
+# For the given input strings, remove everything from the first occurrence of "i" till the end of the string.
+s1 = "remove the special meaning of such constructs"
+s2 = "characters while constructing"
+s3 = "input output"
+pat = re.compile(r"i.*")
+print(pat.sub("", s1))
+# "remove the spec"
+print(pat.sub("", s2))
+# "characters wh"
+print(pat.sub("", s3))
+# ""
+
+# For the given strings, construct a RE to get the output as shown below.
+str1 = "a+b(addition)"
+str2 = "a/b(division) + c%d(#modulo)"
+str3 = "Hi there(greeting). Nice day(a(b)"
+remove_parentheses = re.compile(r"\(.*?\)")
+print(remove_parentheses.sub("", str1))
+# 'a+b'
+print(remove_parentheses.sub("", str2))
+# 'a/b + c%d'
+print(remove_parentheses.sub("", str3))
+# 'Hi there. Nice day'
+
+# Correct the given RE to get the expected output.
+words = "plink incoming tint winter in caution sentient"
+# Wrong output
+change = re.compile(r"int|in|ion|ing|inco|inter|ink")
+print(change.sub("X", words))
+"plXk XcomXg tX wXer X cautX sentient"
+
+# Correct output
+change2 = re.compile(r"i(nt|n|on|ng|nco|nter|nk)+?")
+print(change2.sub("X", words))
+# "plX XmX tX wX X cautX sentient"
+# change2 = re.compile(r'in(ter|co|t|g|k)?|ion')
+
+# For the given greedy quantifiers, what would be the equivalent form using the {m,n} representation?
+
+# ? is same as {0,1} is same as {,1}
+# * is same as {0,}
+# + is same as {1,}
+
+# (a*|b*) is same as (a|b)* — True or False?
+print(re.sub(r"(a*|b*)", "X", "babble"))
+# XXXXXXlXeX
+print(re.sub(r"(a|b)*", "X", "babble"))
+# XXlXeX
+
+# For the given input strings, remove everything from the first occurrence of "test" (irrespective of case) till the end of the string, provided "test" isn't at the end of the string.
+s1 = "this is a Test"
+s2 = "always test your RE for corner cases"
+s3 = "a TEST of skill tests?"
+pat = re.compile(r"(test)*", flags=re.I)
+print(pat.sub("", s1))
+print(pat.sub("", s2))
+print(pat.sub("", s3))
