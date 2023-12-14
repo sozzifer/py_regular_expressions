@@ -149,7 +149,7 @@ print([r for r in repeats if re.search(r"ab{3}c", r)])
 print(re.sub(r"a\{5}", "a{6}", "a{5} = 10"))
 # a{6} = 10
 
-# If the characters inside {} aren't one of the four specified quantifiers, no escaping is needed
+# If the characters inside {} aren't one of the four specified integer quantifiers, no escaping is needed
 print(re.sub(r"_{a,b}", "-{c,d}", "report_{a,b}.txt"))
 # report-{c,d}.txt
 
@@ -264,7 +264,7 @@ print(re.sub(r":.*+", "X", ip))
 # figX
 
 # Greedy
-print(re.sub(r":.*", "X", ip))
+print(re.sub(r":.*apple", "X", ip))
 # figX
 
 # Non-greedy
@@ -274,6 +274,8 @@ print(re.sub(r":.*?", "X", ip))
 # Possessive quantifier won't backtrack so the pattern below will never match
 print(bool(re.search(r":.*+apple", ip)))
 # False
+print(re.sub(r":.*apple", "X", ip))
+# figXs:orange
 
 # Find numbers >= 100 where each number has optional leading zeroes (314, 00984)
 numbers = "42 314 001 12 00984"
@@ -378,7 +380,87 @@ print(re.sub(r"(a|b)*", "X", "babble"))
 s1 = "this is a Test"
 s2 = "always test your RE for corner cases"
 s3 = "a TEST of skill tests?"
-pat = re.compile(r"(test)*", flags=re.I)
+
+pat = re.compile(r"test.+", flags=re.I)
+
 print(pat.sub("", s1))
+# this is a Test
 print(pat.sub("", s2))
+# always
 print(pat.sub("", s3))
+# a
+
+# For the input list words, filter all elements starting with "s" and containing "e" and "t" in any order.
+words = ["sequoia", "subtle", "exhibit", "a set", "sets", "tests", "site"]
+
+print([w for w in words if re.fullmatch(r"\bs.*(e+|t+)", w)])
+# ["subtle", "sets", "site"]
+# [w for w in words if re.search(r'\As.*(e.*t|t.*e)', w)]
+
+# For the input list words, remove all elements having less than 6 characters.
+words = ["sequoia", "subtle", "exhibit", "asset", "sets", "tests", "site"]
+print([w for w in words if len(re.sub(r"\A.{0,5}", "", w)) != 0])
+# ['sequoia', 'subtle', 'exhibit']
+# [w for w in words if re.search(r'.{6,}', w)]
+
+# For the input list words, filter all elements starting with s or t and having a maximum of 6 characters.
+words = ["sequoia", "subtle", "exhibit", "asset", "sets", "t set", "site"]
+print([w for w in words if len(re.sub(r"(s|t).{,5}", "", w)) == 0])
+# ['subtle', 'sets', 't set', 'site']
+# print([w for w in words if re.fullmatch(r"(s|t).{,5}", w)])
+
+# Can you reason out why this code results in the output shown? The aim was to remove all <characters> patterns but not the <> ones.
+ip = "a<apple> 1<> b<bye> 2<> c<cat>"
+print(re.sub(r"<.+?>", "", ip))
+# "a 1 2" (actual output)
+# 'a 1<> b 2<> c' (expected output)
+
+# Use re.split() to get the output as shown below for given input strings.
+s1 = "go there  //   'this // that'"
+s2 = "a//b // c//d e//f // 4//5"
+s3 = "42// hi//bye//see // carefully"
+
+pat = re.compile(r" {2,}// {2,}")
+
+print(pat.split(s1))
+# ['go there', ''this // that'']
+print(pat.split(s2))
+# ['a//b', 'c//d e//f // 4//5']
+print(pat.split(s3))
+# ['42// hi//bye//see', 'carefully']
+
+# pat = re.compile(r' +// +')
+# pat.split(s1, maxsplit=1)
+# pat.split(s2, maxsplit=1)
+# pat.split(s3, maxsplit=1)
+
+# Modify the given regular expression such that it gives the expected results.
+
+s1 = "appleabcabcabcapricot"
+s2 = "bananabcabcabcdelicious"
+pat = re.compile(r'(abc)+a')
+print(bool(pat.search(s1)))
+# True
+print(bool(pat.search(s2)))
+# True
+
+# expected output
+# 'abc' shouldn't be considered when trying to match 'a' at the end
+pat = re.compile(r'(abc)++a')
+print(bool(pat.search(s1)))
+# True
+print(bool(pat.search(s2)))
+# False
+
+# Modify the given regular expression such that it gives the expected result.
+
+cast = 'dragon-unicorn--centaur---mage----healer'
+c = '-'
+
+# wrong output
+print(re.sub(rf'{c}{3,}', c, cast))
+# 'dragon-unicorn--centaur---mage----healer'
+
+# expected output
+print(re.sub(rf'{c}{{3,}}', c, cast))
+# 'dragon-unicorn--centaur-mage-healer'
