@@ -15,10 +15,10 @@ print([w for w in words if re.search(r"c[ou]t", w)])
 # ['cute', 'cot', 'scuttle']
 
 # r'.(a|e|o)+t' won't work as capture group prevents getting the entire match
-print(re.findall(r".[aeo]+t", "meeting cute boat site foot cat net"))
-# ["meet", "boat", "foot", "cat", "net"]
 print(re.findall(r".(a|e|o)+t", "meeting cute boat site foot cat net"))
 # ['e', 'a', 'o', 'a', 'e']
+print(re.findall(r".[aeo]+t", "meeting cute boat site foot cat net"))
+# ["meet", "boat", "foot", "cat", "net"]
 
 ########################
 #   Character ranges   #
@@ -199,3 +199,44 @@ def num_range(s):
 print(re.sub(r"\d+", num_range, "45 349 651 593 4 204"))
 # 0 1 0 1 0 1
 
+#################
+#   Exercises   #
+#################
+
+# For the list items, filter all elements starting with hand and ending immediately with s or y or le.
+
+items = ["-handy", "hand", "handy", "unhand", "hands", "hand-icy", "handle"]
+print([i for i in items if re.search(r"\Ahand[sy]|le", i)])
+# ['handy', 'hands', 'handle']
+
+# Replace all whole words reed or read or red with X.
+
+ip = "redo red credible :read: rod reed"
+print(re.sub(r"\b[read]+\b", "X", ip))
+# redo X credible :X: rod X
+# \bre[ae]?d\b
+
+# For the list words, filter all elements containing e or i followed by l or n. Note that the order mentioned should be followed.
+
+words = ["surrender", "unicorn", "newer", "door", "empty", "eel", "pest"]
+print([w for w in words if re.search(r"(e|i).*(l|n)", w)])
+# ['surrender', 'unicorn', 'eel']
+# [ei].*[ln]
+
+# For the list words, filter all elements containing e or i and l or n in any order.
+print([w for w in words if re.search(r"[ei].*[ln]|[ln].*[ei]", w)])
+# ['surrender', 'unicorn', 'newer', 'eel']
+
+# Extract all hex character sequences, with 0x optional prefix. Match the characters case insensitively, and the sequences shouldn't be surrounded by other word characters.
+str1 = "128A foo 0xfe32 34 0xbar"
+str2 = "0XDEADBEEF place 0x0ff1ce bad"
+
+pat = re.compile(r"\b(0x)?[\da-f]+\b", flags=re.I)
+
+hex_iter = pat.finditer(str1)
+print([h[0] for h in hex_iter])
+# ["128A", "0xfe32", "34"]
+
+hex_iter = pat.finditer(str2)
+print([h[0] for h in hex_iter])
+# ["0XDEADBEEF", "0x0ff1ce", "bad"]
