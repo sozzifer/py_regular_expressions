@@ -240,3 +240,110 @@ print([h[0] for h in hex_iter])
 hex_iter = pat.finditer(str2)
 print([h[0] for h in hex_iter])
 # ["0XDEADBEEF", "0x0ff1ce", "bad"]
+
+# Delete from ( to the next occurrence of ) unless they contain parentheses characters in between.
+
+str1 = "def factorial()"
+str2 = "a/b(division) + c%d(#modulo) - (e+(j/k-3)*4)"
+str3 = "Hi there(greeting). Nice day(a(b)"
+
+del_paren = re.compile(r"\([^()]*\)")
+
+print(del_paren.sub("", str1))
+# def factorial
+
+print(del_paren.sub("", str2))
+# a/b + c%d - (e+*4)
+
+print(del_paren.sub("", str3))
+# Hi there. Nice day(a
+
+# For the list words, filter all elements not starting with e or p or u.
+words = ["surrender", "unicorn", "newer", "door", "empty", "eel", "(pest)"]
+
+not_epu = re.compile(r"\b[^epu]")
+
+print([w for w in words if not_epu.search(w)])
+# ['surrender', 'newer', 'door', '(pest)']
+
+# For the list words, filter all elements not containing u or w or ee or -.
+words = ["p-t", "you", "tea", "heel", "owe", "new", "reed", "ear"]
+
+print([w for w in words if not re.search(r"[uw-]|ee", w)])
+# ['tea', 'ear']
+
+# The given input strings contain fields separated by , and fields can be empty too. Replace last three fields with WHTSZ323.
+
+row1 = "(2),kite,12,,D,C,,"
+row2 = "hi,bye,sun,moon"
+
+pat = re.compile(r"(,[^,]*){3}\Z")
+
+print(pat.sub(",WHTSZ323", row1))
+# (2),kite,12,,D,WHTSZ323
+
+print(pat.sub(",WHTSZ323", row2))
+# hi,WHTSZ323
+
+# Split the given strings based on consecutive sequence of digit or whitespace characters.
+
+str1 = "lion \t Ink32onion Nice"
+str2 = "**1\f2\n3star\t7 77\r**"
+
+pat = re.compile(r"[\d\s]+")
+
+print(pat.split(str1))
+# ["lion", "Ink", "onion", "Nice"]
+
+print(pat.split(str2))
+# ["**", "star", "**"]
+
+# Delete all occurrences of the sequence <characters> where characters is one or more non > characters and cannot be empty.
+
+ip = "a<ap\nple> 1<> b<bye> 2<> c<cat>"
+
+pat = re.compile(r"<[^>]+>")
+print(pat.sub("", ip))
+# "a 1<> b 2<> c"
+
+# \b[a-z](on|no)[a-z]\b is same as \b[a-z][on]{2}[a-z]\b. True or False? Sample input lines shown below might help to understand the differences, if any.
+
+words = ["known", "mood", "know", "pony", "inns"]
+
+pat1 = re.compile(r"\b[a-z](on|no)[a-z]\b")
+pat2 = re.compile(r"\b[a-z][on]{2}[a-z]\b")
+
+print([w for w in words if pat1.search(w)])
+# ["know", "pony"]
+print([w for w in words if pat2.search(w)])
+# ["mood", "know", "pony", "inns"]
+
+# For the given list, filter all elements containing any number sequence greater than 624.
+
+items = ["hi0000432abcd", "car00625", "42_624 0512", "3.14 96 2 foo1234baz"]
+
+print([i for i in items if any(int(m[0]) > 624 for m in re.finditer(r"\d+", i))])
+# ['car00625', '3.14 96 2 foo1234baz']
+
+# By default, the str.split() method will split on whitespace and remove empty strings from the result. Which re module function would you use to replicate this functionality?
+
+ip = " \t\r  so  pole\t\t\t\n\nlit in to \r\n\v\f"
+
+print(re.findall(r"\S+", ip))
+
+# Convert the given input string to two different lists as shown below.
+
+ip = "price_42 roast^\t\n^-ice==cat\neast"
+
+print(re.split(r"\W+", ip))
+# ["price_42", "roast", "ice", "cat", "east"]
+
+print(re.split(r"(\W+)", ip))
+# ["price_42", " ", "roast", "^\t\n^-", "ice", "==", "cat", "\n", "east"]
+
+# Filter all whole elements with optional whitespaces at the start followed by three to five non-digit characters. Whitespaces at the start should not be part of the calculation for non-digit characters.
+
+words = ["\t \ncat", "goal", " oh", "he-he", "goal2", "ok ", "sparrow"]
+
+print([w for w in words if re.fullmatch(r"\s*+\D{3,5}", w)])
+# ['\t \ncat', 'goal', 'he-he', 'ok ']
